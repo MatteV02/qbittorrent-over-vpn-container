@@ -1,0 +1,81 @@
+# qBittorrent over VPN
+
+A **Dockerized qBittorrent client** that routes all traffic through a VPN, ensuring privacy and security. This project provides an out-of-the-box solution for running qBittorrent with OpenVPN, including automatic port forwarding (if supported by your VPN provider) and a kill switch to prevent IP leaks.
+
+---
+
+## ✨ Features
+- **qBittorrent WebUI**: Access and manage your torrents via a web interface.
+- **OpenVPN Client**: All traffic is routed through a VPN for privacy.
+- **Kill Switch**: Prevents IP leaks if the VPN connection drops.
+- **Automatic Port Forwarding**: Uses `natpmpc` to request and maintain an open port (if supported by your VPN provider).
+- **Lightweight**: Built on Debian Trixie slim for minimal resource usage.
+
+---
+
+## 🚀 How to Test
+
+### Prerequisites
+- Docker and Docker Compose installed on your system.
+- A VPN provider that supports OpenVPN and (optionally) port forwarding.
+
+### Steps
+1. Download the [`compose.yml`](compose.yml) file.
+2. Run the following command to start the container:
+   ```bash
+   docker compose up
+   ```
+3. The container expects two volumes, edit `compose.yml` according to your setup:
+   - `/home/qbittorrent/Downloads`: Where downloaded files will be stored.
+   - `/root/vpn-config`: This folder must contain:
+     - An `.ovpn` configuration file for your VPN.
+     - A `.txt` file with your VPN credentials (username on the first line, password on the second).
+
+4. After starting the container, check the logs for the qBittorrent WebUI address and the port for incoming torrent connections:
+   ```bash
+   docker logs <container_name>
+   ```
+
+5. Access the qBittorrent WebUI using the provided address. The default login credentials are:
+   - **Username**: `admin`
+   - **Password**: `adminadmin`
+   **⚠️ Important:** Change the password after your first login.
+
+6. You can change the qBittorrent port from the "Settings" panel in the WebUI.
+
+---
+
+## 🛠️ Troubleshooting
+
+### `natpmpc` Errors
+`natpmpc` requires the VPN tunnel interface gateway to work. Due to routing table conflicts, the gateway cannot be automatically detected. If the heuristic fails, manually override it by setting the `VPN_GATEWAY` environment variable in your `compose.yml`:
+```yaml
+environment:
+  VPN_GATEWAY: <your_vpn_gateway_ip>
+```
+
+### Firewall Configuration
+The container enforces the following firewall rules by default:
+
+| Rule                                      | Policy |
+|-------------------------------------------|--------|
+| Traffic through `tun0`                    | ALLOW  |
+| UDP traffic to `<VPN_ADDRESS>` port `1194`| ALLOW  |
+| Replies from `<VPN_ADDRESS>` port `1194`  | ALLOW  |
+| Incoming TCP traffic to port `8080`       | ALLOW  |
+| Replies from port `8080`                  | ALLOW  |
+| DNS requests to `1.1.1.1` port `53`       | ALLOW  |
+| Replies from `1.1.1.1` port `53`          | ALLOW  |
+| All other traffic                         | DROP   |
+
+**Note:** The qBittorrent WebUI can only be hosted on port `8080`.
+
+---
+
+## 🤝 Contributing
+Contributions are welcome! Please open an issue or submit a pull request for any improvements or bug fixes.
+
+---
+
+## 📜 License
+This project is licensed under the [Unlicense License](LICENSE).
