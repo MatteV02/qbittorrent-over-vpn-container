@@ -17,6 +17,6 @@ jobs:
           username: ${{secrets.DOCKER_USERNAME}}
           password: ${{secrets.DOCKER_PASSWORD}}
       - name: Building the image
-        run: docker build -t ${{secrets.DOCKER_USERNAME}}/flask:latest qbittorrent-openvpn-container
+        run: docker build -t ${{secrets.DOCKER_USERNAME}}/qbittorrent-over-openvpn:latest qbittorrent-openvpn-container
       - name: pushing the image
-        run: docker push ${{secrets.DOCKER_USERNAME}}/qbittorrent-over-vpn:latest
+        run: docker push ${{secrets.DOCKER_USERNAME}}/qbittorrent-over-openvpn:latest
