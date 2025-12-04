@@ -26,6 +26,9 @@ RUN mkdir -p /home/${QBITTORRENT_USER}/.config/qBittorrent && \
     echo "\n[BitTorrent]" >> /home/${QBITTORRENT_USER}/.config/qBittorrent/qBittorrent.conf && \
     echo "Session\\Interface=tun0" >> /home/${QBITTORRENT_USER}/.config/qBittorrent/qBittorrent.conf && \
     echo "Session\\InterfaceName=tun0" >> /home/${QBITTORRENT_USER}/.config/qBittorrent/qBittorrent.conf && \
+    echo "\n[Network]" >> /home/${QBITTORRENT_USER}/.config/qBittorrent/qBittorrent.conf && \
+    # Disable default PortForwarding routine
+    echo "PortForwardingEnabled=false" >> /home/${QBITTORRENT_USER}/.config/qBittorrent/qBittorrent.conf && \
     echo "\n[Preferences]" >> /home/${QBITTORRENT_USER}/.config/qBittorrent/qBittorrent.conf && \
     # Password: adminadmin
     echo 'WebUI\\Password_PBKDF2="@ByteArray(GzJPf38x/Fkwt5mmG2Gw4A==:YNf9UUd+hAD27T1S1MNwLLqVT41BYKYI9cFa+Kv/gWtKRLcgLwZkYVhd9tDN8a/cYcEAdZ6jah6Ki3lRgUwaUg==)"' >> /home/${QBITTORRENT_USER}/.config/qBittorrent/qBittorrent.conf && \
