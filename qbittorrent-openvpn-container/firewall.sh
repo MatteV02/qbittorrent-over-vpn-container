@@ -5,6 +5,10 @@ iptables -P INPUT DROP
 iptables -P OUTPUT DROP
 iptables -P FORWARD DROP
 
+# allow loopback
+iptables -A INPUT -i lo -j ACCEPT
+iptables -A OUTPUT -o lo -j ACCEPT
+
 # Allow DNS
 iptables -A OUTPUT -p udp -d 1.1.1.1 --dport 53 -j ACCEPT
 iptables -A INPUT -p udp -s 1.1.1.1 --sport 53 -j ACCEPT

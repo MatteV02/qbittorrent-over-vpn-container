@@ -11,6 +11,7 @@ RUN apt update && \
         natpmpc \
         iproute2 \
         procps \
+        curl \
         && rm -rf /var/lib/apt/lists/*
 
 # Create qBittorrent unprivileged user
@@ -23,11 +24,13 @@ RUN mkdir -p /home/${QBITTORRENT_USER}/.config/qBittorrent && \
     echo "Accepted=true" >> /home/${QBITTORRENT_USER}/.config/qBittorrent/qBittorrent.conf && \
     # set OpenVPN interface as default
     echo "\n[BitTorrent]" >> /home/${QBITTORRENT_USER}/.config/qBittorrent/qBittorrent.conf && \
-    echo "Session\Interface=tun0" >> /home/${QBITTORRENT_USER}/.config/qBittorrent/qBittorrent.conf && \
-    echo "Session\InterfaceName=tun0" >> /home/${QBITTORRENT_USER}/.config/qBittorrent/qBittorrent.conf && \
+    echo "Session\\Interface=tun0" >> /home/${QBITTORRENT_USER}/.config/qBittorrent/qBittorrent.conf && \
+    echo "Session\\InterfaceName=tun0" >> /home/${QBITTORRENT_USER}/.config/qBittorrent/qBittorrent.conf && \
     echo "\n[Preferences]" >> /home/${QBITTORRENT_USER}/.config/qBittorrent/qBittorrent.conf && \
     # Password: adminadmin
-    echo 'WebUI\Password_PBKDF2="@ByteArray(GzJPf38x/Fkwt5mmG2Gw4A==:YNf9UUd+hAD27T1S1MNwLLqVT41BYKYI9cFa+Kv/gWtKRLcgLwZkYVhd9tDN8a/cYcEAdZ6jah6Ki3lRgUwaUg==)"' >> /home/${QBITTORRENT_USER}/.config/qBittorrent/qBittorrent.conf && \
+    echo 'WebUI\\Password_PBKDF2="@ByteArray(GzJPf38x/Fkwt5mmG2Gw4A==:YNf9UUd+hAD27T1S1MNwLLqVT41BYKYI9cFa+Kv/gWtKRLcgLwZkYVhd9tDN8a/cYcEAdZ6jah6Ki3lRgUwaUg==)"' >> /home/${QBITTORRENT_USER}/.config/qBittorrent/qBittorrent.conf && \
+    # allow incoming connections from loopback interface without need for authentication - required for automatic port change
+    echo 'WebUI\\LocalHostAuth=false' >> /home/${QBITTORRENT_USER}/.config/qBittorrent/qBittorrent.conf && \
     chown -R ${QBITTORRENT_USER}:${QBITTORRENT_USER} /home/${QBITTORRENT_USER}/.config/qBittorrent
 
 RUN mkdir -p /home/${QBITTORRENT_USER}/Downloads && \
