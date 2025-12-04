@@ -10,6 +10,7 @@ RUN apt update && \
         iptables \
         natpmpc \
         iproute2 \
+        procps \
         && rm -rf /var/lib/apt/lists/*
 
 # Create qBittorrent unprivileged user
