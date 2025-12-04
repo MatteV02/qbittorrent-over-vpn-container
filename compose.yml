@@ -1,22 +1,20 @@
 services:
   qbittorrent:
-    build:
-      context: ./qbittorrent-openvpn-container
-      dockerfile: Dockerfile
+    image: mattev02/qbittorrent-over-openvpn:latest
     container_name: qbittorrent
     cap_add:
-      - NET_ADMIN
+      - NET_ADMIN # DO NOT REMOVE
     volumes:
-      - /mnt/nfsshare:/home/qbittorrent/Downloads
-      - ./vpn-config:/root/vpn-config
-      - /dev/net/tun:/dev/net/tun
+      - CHANGE_ME_WITH_DOWNLOADS_PATH:/home/qbittorrent/Downloads
+      - CHANGE_ME_WITH_VPN_CONFIG_PATH:/root/vpn-config
+      - /dev/net/tun:/dev/net/tun # DO NOT REMOVE
     ports:
       - "8080:8080"  # qBittorrent Web UI
-    networks:
+    networks: # optional
       - qbittorrent_network
     restart: unless-stopped
 
-networks:
+networks: # optional
   qbittorrent_network:
     driver: bridge
     driver_opts:
