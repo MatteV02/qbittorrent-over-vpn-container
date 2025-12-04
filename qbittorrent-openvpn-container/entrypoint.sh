@@ -58,5 +58,10 @@ setup_nat_and_qbittorrent() {
     done
 }
 
-# Run the function in the foreground to keep the container alive
-setup_nat_and_qbittorrent
+# Run the function only if DISABLE_NATPMPC is not defined
+if [ -z "$DISABLE_NATPMPC" ]; then
+    setup_nat_and_qbittorrent
+else
+    # Keep the container alive if DISABLE_NATPMPC is defined
+    tail -f /dev/null
+fi
