@@ -8,6 +8,9 @@ services:
       - CHANGE_ME_WITH_DOWNLOADS_PATH:/home/qbittorrent/Downloads
       - CHANGE_ME_WITH_VPN_CONFIG_PATH:/root/vpn-config
       - /dev/net/tun:/dev/net/tun # DO NOT REMOVE
+    # environment:
+    # #   - DISABLE_NATPMPC=""  # Uncomment this if you want to disable automatic port forwarding requests
+    # #   - VPN_GATEWAY="your VPN interface gateway address"  # Uncomment this if you need to specify manually the VPN gateway address (more info on README.md)
     ports:
       - "8080:8080"  # qBittorrent Web UI
     networks: # optional
