@@ -30,18 +30,15 @@ A **Dockerized qBittorrent client** that routes all traffic through a VPN, ensur
    - `/root/vpn-config`: This folder must contain:
      - An `.ovpn` configuration file for your VPN.
      - A `.txt` file with your VPN credentials (username on the first line, password on the second).
-
-4. After starting the container, check the logs for the qBittorrent WebUI address and the port for incoming torrent connections:
+4. After starting the container, an automated routine asks the VPN server to forward a port through `natpmpc` then the received port is shown in the container logs:
    ```bash
    docker logs <container_name>
    ```
-
 5. Access the qBittorrent WebUI using the provided address. The default login credentials are:
    - **Username**: `admin`
    - **Password**: `adminadmin`
    **⚠️ Important:** Change the password after your first login.
-
-6. You can change the qBittorrent port from the "Settings" panel in the WebUI.
+6. The qBittorrent port should be up to date with the output of Docker logs. Check it from the "Settings" panel in the WebUI.
 
 ---
 
@@ -53,6 +50,8 @@ A **Dockerized qBittorrent client** that routes all traffic through a VPN, ensur
 environment:
   VPN_GATEWAY: <your_vpn_gateway_ip>
 ```
+This works only if you VPN provider allows port forwarding through natpmpc requests. If you want to disable this routine just define in your `compose.yml` this variable `DISABLE_NATPMPC`.  
+**⚠️ Important:** You won't be able to seed your torrents!
 
 ### Firewall Configuration
 The container enforces the following firewall rules by default:
