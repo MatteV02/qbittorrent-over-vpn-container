@@ -41,7 +41,7 @@ setup_nat_and_qbittorrent() {
         MAPPED_PORT_UDP=$(natpmpc -a 1 0 udp 60 -g $VPN_GATEWAY | grep -oP 'Mapped public port \K\d+')
         echo "natpmpc retrieved udp $MAPPED_PORT_UDP port"
         MAPPED_PORT_TCP=$(natpmpc -a 1 0 tcp 60 -g $VPN_GATEWAY | grep -oP 'Mapped public port \K\d+')
-        echo "natpmpc retrieved udp $MAPPED_PORT_TCP port"
+        echo "natpmpc retrieved tcp $MAPPED_PORT_TCP port"
 
         if [ -z "$MAPPED_PORT_UDP" ] || [ -z "$MAPPED_PORT_TCP" ]; then
             echo "ERROR: Failed to retrieve mapped port from natpmpc"
