@@ -1,4 +1,5 @@
 rsync.sh
-docker-run-command.sh
+run_local.sh
 
-vpn-config/*
+vpn-config/
+downloads/
