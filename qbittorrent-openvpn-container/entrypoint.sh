@@ -3,6 +3,9 @@
 VPN_SERVER_IP=${VPN_SERVER_IP:-$(grep -E '^remote\s+[^ ]+' /root/vpn-config/*.ovpn | awk '{print $2}' | head -n 1)}
 export VPN_SERVER_IP
 
+# Start cron
+service cron start
+
 echo "nameserver 1.1.1.1" > /etc/resolv.conf
 
 /root/firewall.sh
@@ -23,8 +26,6 @@ while true; do
     sleep 1
 done
 
-VPN_GATEWAY=${VPN_GATEWAY:-$(ip -4 addr show tun0 | grep -oP '(?<=inet\s)\d+(\.\d+){3}' | cut -d. -f1-3).1}
-
 # Start qBittorrent in the background
 su - ${QBITTORRENT_USER} -c "qbittorrent-nox --webui-port=8080" &
 
@@ -35,6 +36,7 @@ done
 
 # Function to handle NAT-PMP and port updates
 setup_nat_and_qbittorrent() {
+    VPN_GATEWAY=${VPN_GATEWAY:-$(ip -4 addr show tun0 | grep -oP '(?<=inet\s)\d+(\.\d+){3}' | cut -d. -f1-3).1}
     while true; do
         date
         # Map UDP and TCP ports, capture the mapped port
@@ -57,6 +59,20 @@ setup_nat_and_qbittorrent() {
         sleep 45  # Refresh every 45 seconds
     done
 }
+
+add_saved_torrents() {
+    TORRENT_LIST_PATH='/root/torrents'
+    # Load torrents from active_torrents.list
+    if [ -f ${TORRENT_LIST_PATH}/active_torrents.list ]; then
+    while read -r magnet_link; do
+        curl -s -X POST "http://localhost:8080/api/v2/torrents/add" \
+        --data-urlencode "urls=$magnet_link" \
+        --header "Referer: http://localhost:8080"
+    done < ${TORRENT_LIST_PATH}/active_torrents.list
+    fi
+}
+
+add_saved_torrents
 
 # Run the function only if DISABLE_NATPMPC is not defined
 if [ -z "$DISABLE_NATPMPC" ]; then

@@ -12,38 +12,32 @@ RUN apt update && \
         iproute2 \
         procps \
         curl \
+        jq \
+        cron \
         && rm -rf /var/lib/apt/lists/*
 
 # Create qBittorrent unprivileged user
 RUN groupadd ${QBITTORRENT_USER} && \
     useradd --create-home -g ${QBITTORRENT_USER} ${QBITTORRENT_USER}
 
-# Create the qBittorrent config directory and pre-accept the legal notice
 RUN mkdir -p /home/${QBITTORRENT_USER}/.config/qBittorrent && \
-    echo "[LegalNotice]" > /home/${QBITTORRENT_USER}/.config/qBittorrent/qBittorrent.conf && \
-    echo "Accepted=true" >> /home/${QBITTORRENT_USER}/.config/qBittorrent/qBittorrent.conf && \
-    # set OpenVPN interface as default
-    echo "\n[BitTorrent]" >> /home/${QBITTORRENT_USER}/.config/qBittorrent/qBittorrent.conf && \
-    echo "Session\\Interface=tun0" >> /home/${QBITTORRENT_USER}/.config/qBittorrent/qBittorrent.conf && \
-    echo "Session\\InterfaceName=tun0" >> /home/${QBITTORRENT_USER}/.config/qBittorrent/qBittorrent.conf && \
-    echo "\n[Network]" >> /home/${QBITTORRENT_USER}/.config/qBittorrent/qBittorrent.conf && \
-    # Disable default PortForwarding routine
-    echo "PortForwardingEnabled=false" >> /home/${QBITTORRENT_USER}/.config/qBittorrent/qBittorrent.conf && \
-    echo "\n[Preferences]" >> /home/${QBITTORRENT_USER}/.config/qBittorrent/qBittorrent.conf && \
-    # Password: adminadmin
-    echo 'WebUI\\Password_PBKDF2="@ByteArray(GzJPf38x/Fkwt5mmG2Gw4A==:YNf9UUd+hAD27T1S1MNwLLqVT41BYKYI9cFa+Kv/gWtKRLcgLwZkYVhd9tDN8a/cYcEAdZ6jah6Ki3lRgUwaUg==)"' >> /home/${QBITTORRENT_USER}/.config/qBittorrent/qBittorrent.conf && \
-    # allow incoming connections from loopback interface without need for authentication - required for automatic port change
-    echo 'WebUI\\LocalHostAuth=false' >> /home/${QBITTORRENT_USER}/.config/qBittorrent/qBittorrent.conf && \
-    chown -R ${QBITTORRENT_USER}:${QBITTORRENT_USER} /home/${QBITTORRENT_USER}/.config/qBittorrent
+    mkdir -p /home/${QBITTORRENT_USER}/Downloads && \
+    chown -R ${QBITTORRENT_USER}:${QBITTORRENT_USER} /home/${QBITTORRENT_USER}/Downloads && \
+    chown -R ${QBITTORRENT_USER}:${QBITTORRENT_USER} /home/${QBITTORRENT_USER}/.config/qBittorrent && \
+    mkdir -p /root/torrents
 
-RUN mkdir -p /home/${QBITTORRENT_USER}/Downloads && \
-    chown -R ${QBITTORRENT_USER}:${QBITTORRENT_USER} /home/${QBITTORRENT_USER}/Downloads
+COPY crontab.txt /etc/cron.d/qbittorrent-cron
+RUN chmod 0644 /etc/cron.d/qbittorrent-cron && \
+    touch /var/log/cron.log
 
-COPY entrypoint.sh /root/entrypoint.sh
-RUN chmod u+x /root/entrypoint.sh
+COPY qBittorrent.conf /home/${QBITTORRENT_USER}/.config/
+COPY export_torrents.sh /root
+COPY entrypoint.sh /root
+COPY firewall.sh /root
 
-COPY firewall.sh /root/firewall.sh
-RUN chmod u+x /root/firewall.sh
+RUN chmod u+x /root/entrypoint.sh && \
+    chmod u+x /root/firewall.sh && \
+    chmod u+x /root/export_torrents.sh
 
 EXPOSE 8080
 

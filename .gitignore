@@ -3,3 +3,5 @@ run_local.sh
 
 vpn-config/
 downloads/
+qbittorrent-config/
+torrents/
