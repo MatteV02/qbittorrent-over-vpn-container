@@ -22,7 +22,7 @@ A **Dockerized qBittorrent client** that routes all traffic through a VPN, ensur
 - A VPN provider that supports OpenVPN and (optionally) port forwarding.
 
 ### Steps
-1. Download the [`compose.yml`](compose.yml) file.
+1. Download the [`compose.yml`](compose.yml) file. Take a look at its contents to understand how to tune the container settings for you.
 2. Run the following command to start the container:
    ```bash
    docker compose up
