@@ -78,3 +78,11 @@ Contributions are welcome! Please open an issue or submit a pull request for any
 
 ## 📜 License
 This project is licensed under the [Unlicense License](LICENSE).
+
+---
+
+## ⚠️ Legal Notice
+Use Responsibly and Legally:  
+This project is intended for legal and ethical use only. The use of torrents and peer-to-peer (P2P) networks is subject to the laws and regulations of your country. Downloading or sharing copyrighted material without permission is illegal in many jurisdictions and violates the terms of service of most VPN providers.  
+  
+You are solely responsible for ensuring that your use of this software complies with all applicable laws and regulations. The developers of this project do not condone or support the illegal distribution or downloading of copyrighted content.  
