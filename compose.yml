@@ -8,7 +8,6 @@ services:
       - /dev/net/tun:/dev/net/tun # DO NOT REMOVE
       - CHANGE_ME_WITH_DOWNLOADS_PATH:/home/qbittorrent/Downloads
       - CHANGE_ME_WITH_VPN_CONFIG_PATH:/root/vpn-config
-      - CHANGE_ME_WITH_QBITTORRENT_CONFIG_PATH:/home/qbittorrent/.config/qBittorrent  # optional: for saving settings
       - CHANGE_ME_WITH_TORRENT_SAVE_PATH:/root/torrents  # optional: torrent list save folder
     # environment:
     # #   - DISABLE_NATPMPC=""  # Uncomment this if you want to disable automatic port forwarding requests
