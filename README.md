@@ -11,7 +11,6 @@ A **Dockerized qBittorrent client** that routes all traffic through a VPN, ensur
 - **Automatic Port Forwarding**: Uses `natpmpc` to request and maintain an open port (if supported by your VPN provider).
 - **Lightweight**: Built on Debian Trixie slim for minimal resource usage.
 - **Torrent list autosave**: Autosave the active torrents list
-- **qBittorrent settings persistency**: provides a way to save qBittorrent settings between container runs
 
 ---
 
