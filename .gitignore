@@ -5,3 +5,6 @@ vpn-config/
 downloads/
 qbittorrent-config/
 torrents/
+refresh-connection.sh
+vpn-configuration-files/
+auto-refresh-connection.sh
