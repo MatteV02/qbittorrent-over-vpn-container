@@ -1,13 +1,11 @@
 #!/bin/bash
 
+VPN_SERVER_IP=grep -E '^remote\s+[^ ]+' /root/vpn-config/*.ovpn | awk '{print $2}' | head -n 1
+
 iptables -F
 iptables -P INPUT DROP
 iptables -P OUTPUT DROP
 iptables -P FORWARD DROP
-
-# allow loopback
-iptables -A INPUT -i lo -j ACCEPT
-iptables -A OUTPUT -o lo -j ACCEPT
 
 # Allow DNS
 iptables -A OUTPUT -p udp -d 1.1.1.1 --dport 53 -j ACCEPT
