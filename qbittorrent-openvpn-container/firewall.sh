@@ -1,6 +1,6 @@
 #!/bin/bash
 
-VPN_SERVER_IP=grep -E '^remote\s+[^ ]+' /root/vpn-config/*.ovpn | awk '{print $2}' | head -n 1
+VPN_SERVER_IP=$(grep -E '^remote\s+[^ ]+' /root/vpn-config/*.ovpn | awk '{print $2}' | head -n 1)
 
 iptables -F
 iptables -P INPUT DROP
